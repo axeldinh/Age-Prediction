@@ -1,0 +1,18 @@
+{
+  "experiment_name": "test",
+  "model": "resnet50",
+  "model_config": {
+    "pretrained": true
+  },
+  "training": {
+    "batch_size": 32,
+    "max_epochs": 2
+  },
+  "optimizer": "Adam",
+  "optimizer_config": {
+    "lr": 1e-4
+  },
+  "criterion": "MSE",
+  "criterion_config": {}
+}
+
