@@ -21,7 +21,7 @@ def main():
 
     trainer = pl.Trainer(
         accelerator=accelerator,
-        devices=-1,
+        devices=1 if accelerator == "cpu" else -1,
         logger=logger,
         max_epochs=int(config["training"]["max_epochs"])
     )
