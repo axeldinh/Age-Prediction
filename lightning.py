@@ -16,6 +16,14 @@ class LitModel(pl.LightningModule):
         self.scheduler = load_scheduler(self.optimizer, config)
         self.criterion = load_criterion(config)
         self.train_loader, self.val_loader, self.test_loader = load_datasets(int(config["training"]["batch_size"]))
+
+        self.example_input_array = torch.randn(1, 3, 512, 512)
+
+        self.example_images = [(
+            self.val_loader.dataset[i][0].unsqueeze(0),
+            self.val_loader.dataset[i][1].item()
+        ) for i in range(5)]
+
         self.save_hyperparameters()
 
     def forward(self, x):
@@ -46,6 +54,23 @@ class LitModel(pl.LightningModule):
     def validation_epoch_end(self, outputs):
         avg_loss = torch.stack([x['val_loss'] for x in outputs]).mean()
         self.log('val_loss', avg_loss, prog_bar=True)
+
+        if self.current_epoch == 0:
+            for i in range(len(self.example_images)):
+                target = self.example_images[i][1]
+                self.logger.experiment.add_image(
+                    "Image {}, {} Years Old".format(i, target), self.example_images[i][0].squeeze(0)
+                    , self.current_epoch, dataformats="CHW"
+                )
+
+        for i in range(len(self.example_images)):
+            prediction = self.model(self.example_images[i][0]).item()
+            target = self.example_images[i][1]
+            self.logger.experiment.add_scalar(
+                "Image {}, Target {} vs Prediction".format(i, int(target)),
+                prediction, self.current_epoch
+            )
+
         return {'val_loss': avg_loss}
 
     def test_step(self, batch, batch_idx):
@@ -64,5 +89,3 @@ class LitModel(pl.LightningModule):
             'optimizer': self.optimizer,
             'scheduler': self.scheduler
         }
-
-
