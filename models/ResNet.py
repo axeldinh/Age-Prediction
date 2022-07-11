@@ -25,7 +25,7 @@ class ResNet50(nn.Module):
     def __init__(self, num_classes, pretrained=True):
         super(ResNet50, self).__init__()
         self.model = resnet50(weights=ResNet50_Weights if pretrained else None)
-        self.model.fc = nn.Linear(512, num_classes)
+        self.model.fc = nn.Linear(2048, num_classes)
 
     def forward(self, x):
         x = self.model(x)
