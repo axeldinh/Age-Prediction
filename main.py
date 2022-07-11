@@ -17,7 +17,8 @@ def main():
 
     lit_model = LitModel(config)
 
-    logger = TensorBoardLogger("logs", name=config["experiment_name"])
+    logger = TensorBoardLogger("logs", name=config["experiment_name"], log_graph=True)
+
     trainer = pl.Trainer(
         accelerator=accelerator,
         devices=-1,
