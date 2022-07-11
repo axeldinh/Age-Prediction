@@ -64,7 +64,7 @@ class LitModel(pl.LightningModule):
                 )
 
         for i in range(len(self.example_images)):
-            prediction = self.model(self.example_images[i][0]).item()
+            prediction = self.model(self.example_images[i][0].to(self.device)).item()
             target = self.example_images[i][1]
             self.logger.experiment.add_scalar(
                 "Image {}, Target {} vs Prediction".format(i, int(target)),
@@ -87,5 +87,5 @@ class LitModel(pl.LightningModule):
     def configure_optimizers(self):
         return {
             'optimizer': self.optimizer,
-            'scheduler': self.scheduler
+            'lr_scheduler': self.scheduler
         }
