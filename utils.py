@@ -38,6 +38,14 @@ def load_optimizer(model, config):
         return torch.optim.Adam(model.parameters(), **config["optimizer_config"])
 
 
+def load_scheduler(optimizer, config):
+
+    scheduler_name = config["scheduler"]
+
+    if scheduler_name == "ReduceLROnPlateau":
+        return torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, **config["scheduler_config"])
+
+
 def load_criterion(config):
     criterion_name = config["criterion"]
 

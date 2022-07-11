@@ -3,7 +3,7 @@ import pytorch_lightning as pl
 import torch
 
 from data_loading import load_datasets
-from utils import load_model, load_criterion, load_optimizer
+from utils import load_model, load_criterion, load_optimizer, load_scheduler
 
 
 class LitModel(pl.LightningModule):
@@ -13,6 +13,7 @@ class LitModel(pl.LightningModule):
         self.config = config
         self.model = load_model(config)
         self.optimizer = load_optimizer(self.model, config)
+        self.scheduler = load_scheduler(self.optimizer, config)
         self.criterion = load_criterion(config)
         self.train_loader, self.val_loader, self.test_loader = load_datasets(int(config["training"]["batch_size"]))
         self.save_hyperparameters()
@@ -33,7 +34,7 @@ class LitModel(pl.LightningModule):
         x, target = batch
         output = self.model(x)
         loss = self.criterion(output.view(-1), target.view(-1))
-        self.log('train_loss', loss, on_step=True, prog_bar=True, logger=True)
+        self.log('train_loss', loss, on_step=True)
         return {'loss': loss}
 
     def validation_step(self, batch, batch_idx):
@@ -59,6 +60,9 @@ class LitModel(pl.LightningModule):
         return {'test_loss': avg_loss}
 
     def configure_optimizers(self):
-        return self.optimizer
+        return {
+            'optimizer': self.optimizer,
+            'scheduler': self.scheduler
+        }
 
 

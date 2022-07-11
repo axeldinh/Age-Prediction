@@ -13,6 +13,13 @@
     "lr": 1e-4
   },
   "criterion": "MSE",
-  "criterion_config": {}
+  "criterion_config": {},
+  "scheduler": "ReduceLROnPlateau",
+  "scheduler_config": {
+    "mode": "min",
+    "factor": 0.5,
+    "patience": 5,
+    "min_lr": 1e-7
+  }
 }
 

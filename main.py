@@ -25,6 +25,7 @@ def main():
         max_epochs=int(config["training"]["max_epochs"])
     )
     trainer.fit(model=lit_model)
+    trainer.test(ckpt_path="best")
 
 
 if __name__ == "__main__":
