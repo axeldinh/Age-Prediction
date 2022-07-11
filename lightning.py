@@ -1,11 +1,9 @@
-import json
 
 import pytorch_lightning as pl
 import torch
-from torch import nn
 
 from data_loading import load_datasets
-from models import ResNet
+from utils import load_model, load_criterion, load_optimizer
 
 
 class LitModel(pl.LightningModule):
