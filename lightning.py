@@ -15,7 +15,10 @@ class LitModel(pl.LightningModule):
         self.optimizer = load_optimizer(self.model, config)
         self.scheduler = load_scheduler(self.optimizer, config)
         self.criterion = load_criterion(config)
-        self.train_loader, self.val_loader, self.test_loader = load_datasets(int(config["training"]["batch_size"]))
+        self.train_loader, self.val_loader, self.test_loader = load_datasets(
+            int(config["training"]["batch_size"]),
+            int(config["training"]["num_workers"]),
+        )
 
         self.example_input_array = torch.randn(1, 3, 512, 512)
 

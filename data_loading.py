@@ -47,7 +47,7 @@ class ImageDataset(VisionDataset):
         return len(self.images_names)
 
 
-def load_datasets(batch_size):
+def load_datasets(batch_size, num_workers=0):
     """
     Loads the datasets
     """
@@ -70,19 +70,19 @@ def load_datasets(batch_size):
         train_set,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=4
+        num_workers=num_workers
     )
     val_loader = DataLoader(
         val_set,
         batch_size=batch_size,
         shuffle=False,
-        num_workers=4
+        num_workers=num_workers
     )
     test_loader = DataLoader(
         test_set,
         batch_size=batch_size,
         shuffle=False,
-        num_workers=4
+        num_workers=num_workers
     )
 
     return train_loader, val_loader, test_loader
