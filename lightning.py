@@ -87,5 +87,6 @@ class LitModel(pl.LightningModule):
     def configure_optimizers(self):
         return {
             'optimizer': self.optimizer,
-            'lr_scheduler': self.scheduler
+            'lr_scheduler': self.scheduler,
+            'monitor': 'val_loss'
         }
